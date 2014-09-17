@@ -51,8 +51,10 @@ static const char* kDebuggableSystemProperty = "ro.debuggable";
 static const char* kDebuggableFallback = "0";  // Not debuggable.
 static const char* kLibraryFallback = "libart.so";
 
-const char* JniInvocation::GetLibrary(const char* library) {
-  char default_library[PROPERTY_VALUE_MAX];
+template<typename T> void UNUSED(const T&) {}
+
+const char* JniInvocation::GetLibrary(const char* library, char* buffer) {
+  const char* default_library;
 
   char debuggable[PROPERTY_VALUE_MAX];
   property_get(kDebuggableSystemProperty, debuggable, kDebuggableFallback);
@@ -60,15 +62,21 @@ const char* JniInvocation::GetLibrary(const char* library) {
   if (strcmp(debuggable, "1") != 0) {
     // Not a debuggable build.
     // Do not allow arbitrary library. Ignore the library parameter. This
-    // will also ignore the default library, but initialize to empty string
+    // will also ignore the default library, but initialize to fallback
     // for cleanliness.
     library = kLibraryFallback;
-    default_library[0] = 0;
+    default_library = kLibraryFallback;
   } else {
     // Debuggable build.
     // Accept the library parameter. For the case it is NULL, load the default
     // library from the system property.
-    property_get(kLibrarySystemProperty, default_library, kLibraryFallback);
+    if (buffer != NULL) {
+      property_get(kLibrarySystemProperty, buffer, kLibraryFallback);
+      default_library = buffer;
+    } else {
+      // No buffer given, just use default fallback.
+      default_library = kLibraryFallback;
+    }
   }
   if (library == NULL) {
     library = default_library;
@@ -78,7 +86,8 @@ const char* JniInvocation::GetLibrary(const char* library) {
 }
 
 bool JniInvocation::Init(const char* library) {
-  library = GetLibrary(library);
+  char buffer[PROPERTY_VALUE_MAX];
+  library = GetLibrary(library, buffer);
 
   handle_ = dlopen(library, RTLD_NOW);
   if (handle_ == NULL) {
