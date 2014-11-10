@@ -17,7 +17,7 @@
 #ifndef SCOPED_LOCAL_REF_H_included
 #define SCOPED_LOCAL_REF_H_included
 
-#include "jni.h"
+#include <nativehelper/jni.h>
 
 #include <stddef.h>
 

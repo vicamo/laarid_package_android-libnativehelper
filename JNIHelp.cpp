@@ -17,8 +17,8 @@
 #define LOG_TAG "JNIHelp"
 #include <log/log.h>
 
-#include "JniConstants.h"
-#include "JNIHelp.h"
+#include "nativehelper/JniConstants.h"
+#include "nativehelper/JNIHelp.h"
 
 #include <stdio.h>
 #include <stdlib.h>

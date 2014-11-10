@@ -25,7 +25,7 @@
 #ifndef NATIVEHELPER_JNIHELP_H_
 #define NATIVEHELPER_JNIHELP_H_
 
-#include "jni.h"
+#include <nativehelper/jni.h>
 #include <errno.h>
 #include <unistd.h>
 

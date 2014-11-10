@@ -18,7 +18,7 @@
 #define SCOPED_FD_H_included
 
 #include <unistd.h>
-#include "JNIHelp.h"  // for TEMP_FAILURE_RETRY
+#include <nativehelper/JNIHelp.h>  // for TEMP_FAILURE_RETRY
 
 // A smart pointer that closes the given fd on going out of scope.
 // Use this when the fd is incidental to the purpose of your function,
