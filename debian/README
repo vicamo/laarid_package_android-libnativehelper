@@ -1,0 +1,6 @@
+The Debian Package libandroid-nativehelper0
+-------------------------------------------
+
+This package contains libraries built from Android platform/libnativehelper.
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Mon, 10 Nov 2014 21:30:12 +0800
