@@ -25,9 +25,7 @@
 #define LOG_TAG "JniInvocation"
 #include "log/log.h"
 
-#ifdef HAVE_ANDROID_OS
 #include "cutils/properties.h"
-#endif
 
 JniInvocation* JniInvocation::jni_invocation_ = NULL;
 
@@ -48,15 +46,12 @@ JniInvocation::~JniInvocation() {
   }
 }
 
-#ifdef HAVE_ANDROID_OS
 static const char* kLibrarySystemProperty = "persist.sys.dalvik.vm.lib.2";
 static const char* kDebuggableSystemProperty = "ro.debuggable";
 static const char* kDebuggableFallback = "0";  // Not debuggable.
-#endif
 static const char* kLibraryFallback = "libart.so";
 
 const char* JniInvocation::GetLibrary(const char* library) {
-#ifdef HAVE_ANDROID_OS
   char default_library[PROPERTY_VALUE_MAX];
 
   char debuggable[PROPERTY_VALUE_MAX];
@@ -75,9 +70,6 @@ const char* JniInvocation::GetLibrary(const char* library) {
     // library from the system property.
     property_get(kLibrarySystemProperty, default_library, kLibraryFallback);
   }
-#else
-  const char* default_library = kLibraryFallback;
-#endif
   if (library == NULL) {
     library = default_library;
   }
