@@ -15,10 +15,10 @@
  */
 
 #define LOG_TAG "JNIHelp"
+#include <log/log.h>
 
 #include "JniConstants.h"
 #include "JNIHelp.h"
-#include "ALog-priv.h"
 
 #include <stdio.h>
 #include <stdlib.h>
