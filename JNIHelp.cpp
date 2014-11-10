@@ -77,14 +77,20 @@ extern "C" int jniRegisterNativeMethods(C_JNIEnv* env, const char* className,
     scoped_local_ref<jclass> c(env, findClass(env, className));
     if (c.get() == NULL) {
         char* msg;
-        asprintf(&msg, "Native registration unable to find class '%s'; aborting...", className);
-        e->FatalError(msg);
+        if (asprintf(&msg, "Native registration unable to find class '%s'; aborting...", className) < 0) {
+            e->FatalError("Fail to allocate memory for error messages; aborting...");
+        } else {
+            e->FatalError(msg);
+        }
     }
 
     if ((*env)->RegisterNatives(e, c.get(), gMethods, numMethods) < 0) {
         char* msg;
-        asprintf(&msg, "RegisterNatives failed for '%s'; aborting...", className);
-        e->FatalError(msg);
+        if (asprintf(&msg, "RegisterNatives failed for '%s'; aborting...", className) < 0) {
+            e->FatalError("Fail to allocate memory for error messages; aborting...");
+        } else {
+            e->FatalError(msg);
+        }
     }
 
     return 0;
