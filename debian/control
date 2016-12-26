@@ -4,9 +4,9 @@ Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends: debhelper (>= 9), dh-autoreconf, libandroid-system-core0-dev
 Standards-Version: 3.9.5
 Section: libs
-Homepage: https://github.com/laarid/platform_libnativehelper
-Vcs-Git: git+ssh://git@github.com:laarid/platform_libnativehelper.git
-Vcs-Browser: https://github.com/laarid/platform_libnativehelper
+Homepage: https://github.com/laarid/package_android-libnativehelper
+Vcs-Git: https://github.com/laarid/package_android-libnativehelper.git
+Vcs-Browser: https://github.com/laarid/package_android-libnativehelper
 
 Package: libandroid-nativehelper0-dev
 Priority: extra

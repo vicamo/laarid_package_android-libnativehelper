@@ -32,8 +32,8 @@ m4_define([nativehelper_version],
   [nativehelper_major_version.nativehelper_minor_version.nativehelper_micro_version])
 
 AC_INIT([android-nativehelper], [nativehelper_version],
-  [https://github.com/laarid/platform_libnativehelper/issues], [],
-  [https://github.com/laarid/platform_libnativehelper])
+  [https://github.com/laarid/package_android-libnativehelper/issues], [],
+  [https://github.com/laarid/package_android-libnativehelper])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([include/nativehelper/jni.h])

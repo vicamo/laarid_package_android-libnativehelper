@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: android-platform-libnativehelper
-Source: https://github.com/laarid/platform_libnativehelper
+Source: https://github.com/laarid/package_android-libnativehelper
 
 Files: *
 Copyright: 2014 Android Open Source Project
