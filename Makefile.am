@@ -13,6 +13,7 @@ AM_CPPFLAGS = \
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
+	-std=gnu++98 \
 	-fvisibility=protected \
 	$(SYSTEMCORE_CFLAGS)
 
