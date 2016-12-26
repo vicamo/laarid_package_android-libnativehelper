@@ -9,4 +9,4 @@ include /usr/share/dpkg/default.mk
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with autoreconf --builddirectory=build
+	dh $@ --with autoreconf --builddirectory=build --parallel
