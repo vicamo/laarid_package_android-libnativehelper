@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: Android Native Helper Library
-Description: libandroid-nativehelper-@NATIVEHELPER_RELEASE_NUMBER@
+Name: android-nativehelper-@NATIVEHELPER_API_VERSION@
+Description: Android Native Helper Library
 Version: @VERSION@
-Requires: android-utils-0.0 >= @SYSTEMCORE_REQUIRED_VERSION@
-Libs: -L${libdir} -landroid-nativehelper-@NATIVEHELPER_RELEASE_NUMBER@
+Requires: android-log-@SYSTEMCORE_API_VERSION@ >= @SYSTEMCORE_REQUIRED_VERSION@, android-cutils-@SYSTEMCORE_API_VERSION@ >= @SYSTEMCORE_REQUIRED_VERSION@
+Libs: -L${libdir} -landroid-nativehelper
 Cflags: -I${includedir}/android/nativehelper-@NATIVEHELPER_API_VERSION@

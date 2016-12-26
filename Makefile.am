@@ -24,19 +24,19 @@ libtool_opts = \
 # Installable libraries
 # ---------------------
 lib_LTLIBRARIES = \
-	libandroid-nativehelper-0.la
+	libandroid-nativehelper.la
 
 # libandroid-nativehelper.la
 # --------------------------
-libandroid_nativehelper_0_la_CXXFLAGS = \
+libandroid_nativehelper_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
 	$(SYSTEMCORE_CFLAGS)
-libandroid_nativehelper_0_la_LDFLAGS = \
+libandroid_nativehelper_la_LDFLAGS = \
 	$(libtool_opts)
-libandroid_nativehelper_0_la_LIBADD = \
+libandroid_nativehelper_la_LIBADD = \
 	$(LIBADD_DLOPEN) \
 	$(SYSTEMCORE_LIBS)
-libandroid_nativehelper_0_la_SOURCES = \
+libandroid_nativehelper_la_SOURCES = \
 	JNIHelp.cpp \
 	JniConstants.cpp \
 	JniInvocation.cpp \
