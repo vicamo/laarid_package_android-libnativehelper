@@ -1,3 +1,16 @@
+android-nativehelper (0.0.2) stretch; urgency=low
+
+  * pkg-config: prevent overlinking
+  * NativeHelper: Avoid returning local stack string
+  * update .gitignore
+  * setup versions correctly
+  * ci: add travis-ci support
+  * include pkg-config vars when necessary
+  * always specify language standard used
+  * debian: enable parallel build
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Mon, 26 Dec 2016 21:23:24 +0800
+
 android-nativehelper (0.0.1) unstable; urgency=low
 
   * Initial Release.
