@@ -14,12 +14,7 @@ AM_CPPFLAGS = \
 AM_CXXFLAGS = \
 	-Wall -Werror \
 	-std=gnu++98 \
-	-fvisibility=protected \
-	$(SYSTEMCORE_CFLAGS)
-
-LIBS = \
-	$(LIBADD_DLOPEN) \
-	$(SYSTEMCORE_LIBS)
+	-fvisibility=protected
 
 libtool_opts = \
 	-version-info $(LT_VERSION_INFO) \
@@ -33,8 +28,14 @@ lib_LTLIBRARIES = \
 
 # libandroid-nativehelper.la
 # --------------------------
+libandroid_nativehelper_0_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(SYSTEMCORE_CFLAGS)
 libandroid_nativehelper_0_la_LDFLAGS = \
 	$(libtool_opts)
+libandroid_nativehelper_0_la_LIBADD = \
+	$(LIBADD_DLOPEN) \
+	$(SYSTEMCORE_LIBS)
 libandroid_nativehelper_0_la_SOURCES = \
 	JNIHelp.cpp \
 	JniConstants.cpp \
