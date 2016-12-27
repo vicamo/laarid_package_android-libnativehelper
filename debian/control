@@ -1,4 +1,4 @@
-Source: android-nativehelper
+Source: android-libnativehelper
 Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends: debhelper (>= 9), dh-autoreconf, libandroid-cutils0-dev
