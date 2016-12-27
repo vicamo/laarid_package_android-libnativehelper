@@ -1,5 +1,6 @@
 android-libnativehelper (0.0.2+b1) stretch; urgency=low
 
+  * fix package dependency
   * rename source package name
 
  -- You-Sheng Yang <vicamo@gmail.com>  Tue, 27 Dec 2016 18:19:37 +0800
