@@ -31,7 +31,7 @@ m4_define([nativehelper_release_number], [nativehelper_major_version])
 m4_define([nativehelper_version],
   [nativehelper_major_version.nativehelper_minor_version.nativehelper_micro_version])
 
-AC_INIT([android-nativehelper], [nativehelper_version],
+AC_INIT([android-libnativehelper], [nativehelper_version],
   [https://github.com/laarid/package_android-libnativehelper/issues], [],
   [https://github.com/laarid/package_android-libnativehelper])
 

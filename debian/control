@@ -1,7 +1,9 @@
-Source: android-nativehelper
+Source: android-libnativehelper
 Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
-Build-Depends: debhelper (>= 9), dh-autoreconf, libandroid-cutils0-dev
+Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
+               libandroid-cutils0-dev (>= 0.0.8)
 Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/laarid/package_android-libnativehelper
@@ -13,7 +15,9 @@ Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libandroid-nativehelper0 (= ${binary:Version}), libandroid-system-core0-dev, ${misc:Depends}
+Depends: libandroid-nativehelper0 (= ${binary:Version}),
+         libandroid-cutils0-dev (>= 0.0.8),
+         ${misc:Depends}
 Description: Android libnativehelper - development
  This package contains libraries built from Android platform/libnativehelper.
  .
@@ -25,6 +29,7 @@ Section: libs
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
 Description: Android libnativehelper
  This package contains libraries built from Android platform/libnativehelper.
