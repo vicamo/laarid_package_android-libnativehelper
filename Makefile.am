@@ -56,6 +56,7 @@ inc_HEADERS = \
 	include/nativehelper/ScopedPrimitiveArray.h \
 	include/nativehelper/ScopedStringChars.h \
 	include/nativehelper/ScopedUtfChars.h \
+	include/nativehelper/UniquePtr.h \
 	include/nativehelper/jni.h \
 	include/nativehelper/toStringArray.h
 
