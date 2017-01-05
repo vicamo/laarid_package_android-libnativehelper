@@ -16,34 +16,28 @@
 
 #define LOG_TAG "NativeBridge_test"
 
+#include <linux/limits.h> /* for PATH_MAX */
+
 #include <nativehelper/JniInvocation.h>
 #include <gtest/gtest.h>
 
 
 #include "string.h"
 
-#if defined(HAVE_ANDROID_OS) && defined(__BIONIC__)
-#define HAVE_TEST_STUFF 1
-#else
-#undef HAVE_TEST_STUFF
-#endif
-
-#ifdef HAVE_TEST_STUFF
-
 // PROPERTY_VALUE_MAX.
 #include "cutils/properties.h"
 
+#include <bionic/bionic.h>
 // Ability to have fake local system properties.
-#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
-#include <sys/_system_properties.h>
+#define _REALLY_INCLUDE_BIONIC_PROPERTIES_IMPL_H_
+#include <bionic/properties_impl.h>
 
 extern void *__system_property_area__;
 
 struct LocalPropertyTestState {
     LocalPropertyTestState() : valid(false) {
-        const char* ANDROID_DATA = getenv("ANDROID_DATA");
         char dir_template[PATH_MAX];
-        snprintf(dir_template, sizeof(dir_template), "%s/local/tmp/prop-XXXXXX", ANDROID_DATA);
+        snprintf(dir_template, sizeof(dir_template), "/tmp/prop-XXXXXX");
         char* dirname = mkdtemp(dir_template);
         if (!dirname) {
             fprintf(stderr, "making temp file for test state failed (is %s writable?): %s",
@@ -80,14 +74,12 @@ private:
     std::string pa_filename;
     void *old_pa;
 };
-#endif
 
 namespace android {
 
 class JNIInvocationTest : public testing::Test {
 };
 
-#ifdef HAVE_TEST_STUFF
 static const char* kDebuggableSystemProperty = "ro.debuggable";
 static const char* kIsDebuggableValue = "1";
 static const char* kIsNotDebuggableValue = "0";
@@ -96,10 +88,8 @@ static const char* kLibrarySystemProperty = "persist.sys.dalvik.vm.lib.2";
 static const char* kTestNonNull = "libartd.so";
 static const char* kTestNonNull2 = "libartd2.so";
 static const char* kExpected = "libart.so";
-#endif
 
 TEST_F(JNIInvocationTest, Debuggable) {
-#ifdef HAVE_TEST_STUFF
     LocalPropertyTestState pa;
     ASSERT_TRUE(pa.valid);
     ASSERT_EQ(0, __system_property_add(kDebuggableSystemProperty, 13, kIsDebuggableValue, 1));
@@ -119,13 +109,9 @@ TEST_F(JNIInvocationTest, Debuggable) {
         EXPECT_TRUE(strcmp(result, kTestNonNull) == 0);
         EXPECT_FALSE(strcmp(result, kTestNonNull2) == 0);
     }
-#else
-    GTEST_LOG_(WARNING) << "Host testing unsupported. Please run target tests.";
-#endif
 }
 
 TEST_F(JNIInvocationTest, NonDebuggable) {
-#ifdef HAVE_TEST_STUFF
     LocalPropertyTestState pa;
     ASSERT_TRUE(pa.valid);
     ASSERT_EQ(0, __system_property_add(kDebuggableSystemProperty, 13, kIsNotDebuggableValue, 1));
@@ -145,9 +131,6 @@ TEST_F(JNIInvocationTest, NonDebuggable) {
         EXPECT_TRUE(strcmp(result, kExpected) == 0);
         EXPECT_FALSE(strcmp(result, kTestNonNull) == 0);
     }
-#else
-    GTEST_LOG_(WARNING) << "Host testing unsupported. Please run target tests.";
-#endif
 }
 
 }  // namespace android
