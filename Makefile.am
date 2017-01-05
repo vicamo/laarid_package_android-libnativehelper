@@ -13,7 +13,7 @@ AM_CPPFLAGS = \
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
-	-std=gnu++98 \
+	-std=gnu++11 \
 	-fvisibility=protected
 
 libtool_opts = \
