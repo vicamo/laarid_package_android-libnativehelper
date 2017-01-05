@@ -1,3 +1,11 @@
+android-libnativehelper (0.0.3) stretch; urgency=low
+
+  * merge aosp/marshmallow-dev
+  * build: fix distcheck
+  * build test cases with gtest
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Thu, 5 Jan 2017 16:32:14 +0800
+
 android-libnativehelper (0.0.2+b1) stretch; urgency=low
 
   * fix package dependency
