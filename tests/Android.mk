@@ -1,21 +1,19 @@
-# Build the unit tests.
-LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/JniInvocation_test
 
-# Target unit test.
+TESTS += \
+	%reldir%/JniInvocation_test
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := JniInvocation_test
-LOCAL_CLANG := true
-LOCAL_SRC_FILES := JniInvocation_test.cpp
-LOCAL_SHARED_LIBRARIES := libnativehelper
-include $(BUILD_NATIVE_TEST)
-
-# Host unit test.
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := JniInvocation_test
-LOCAL_CLANG := true
-LOCAL_SRC_FILES := JniInvocation_test.cpp
-LOCAL_SHARED_LIBRARIES := libnativehelper
-include $(BUILD_HOST_NATIVE_TEST)
+%canon_reldir%_JniInvocation_test_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(GTEST_CPPFLAGS)
+%canon_reldir%_JniInvocation_test_LDADD = \
+	libandroid-nativehelper.la \
+	$(GTEST_LIBS)
+%canon_reldir%_JniInvocation_test_DEPENDENCIES = \
+	libandroid-nativehelper.la \
+	$(GTEST_LIBS)
+%canon_reldir%_JniInvocation_test_SOURCES = \
+	%reldir%/JniInvocation_test.cpp
+endif

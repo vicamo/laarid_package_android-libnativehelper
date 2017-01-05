@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 # Distribution
 # ------------
 EXTRA_DIST =
+BUILT_SOURCES =
 CLEANFILES =
 DISTCLEANFILES =
 MAINTAINERCLEANFILES = \
@@ -39,6 +40,11 @@ libtool_opts = \
 	-version-info $(LT_VERSION_INFO) \
 	-export-dynamic \
 	-rpath $(libdir)
+
+check_PROGRAMS =
+TESTS =
+
+include $(srcdir)/gtest.mk
 
 # Installable libraries
 # ---------------------
@@ -90,5 +96,10 @@ $(pkgconfig_DATA): config.status
 EXTRA_DIST += $(pkgconfig_DATA:.pc=.pc.in)
 DISTCLEANFILES += \
 	$(pkgconfig_DATA)
+
+include $(srcdir)/tests/Android.mk
+
+CLEANFILES += $(BUILT_SOURCES)
+GITIGNOREFILES += $(BUILT_SOURCES)
 
 -include $(top_srcdir)/git.mk

@@ -99,6 +99,42 @@ PKG_CHECK_MODULES([SYSTEMCORE], [
 AC_SUBST([SYSTEMCORE_CFLAGS])
 AC_SUBST([SYSTEMCORE_LIBS])
 
+# Thread implementation
+# ---------------------
+AX_PTHREAD(
+  [AC_DEFINE([HAVE_PTHREAD], [1],
+    [Define if you have POSIX threads libraries and header files.])
+  AC_DEFINE([HAVE_PTHREADS], [1],
+    [Define if you have POSIX threads libraries and header files.])],
+  [AC_MSG_FAILURE([pthread not available.])])
+
+# GTest
+# -----
+AC_LANG_PUSH([C++])
+AC_ARG_WITH([gtest],
+  [AS_HELP_STRING([--with-gtest],
+    [Build with Google Test Frameworks based tests @<:@default=check@:>@])],
+  [], [])
+AS_IF([test "x${with_gtest}" != xno],
+  [GTEST_SRCDIR="/usr/src/gtest"
+  AS_IF([test "x${with_gtest}" != xyes],
+    [AS_IF([test -e "${with_gtest}/include/gtest/gtest.h"],
+      [GTEST_SRCDIR="${with_gtest}"])])
+  CPPFLAGS_save="$CPPFLAGS"
+  GTEST_CPPFLAGS="-I ${GTEST_SRCDIR}/include"
+  GTEST_LIBS="libgtest.la libgtest_main.la"
+  CPPFLAGS="${GTEST_CPPFLAGS}"
+  AC_CHECK_HEADER([gtest/gtest.h], [],
+    [AS_IF([test "x${with_gtest}" != xyes],
+      [AC_MSG_ERROR([Google Test Frameworks source folder not found])],
+      [with_gtest=no])])
+  CPPFLAGS="$CPPFLAGS_save"])
+AC_SUBST([GTEST_CPPFLAGS])
+AC_SUBST([GTEST_LIBS])
+AC_SUBST([GTEST_SRCDIR])
+AC_LANG_POP()
+AM_CONDITIONAL([HAVE_GTEST], [test "x${with_gtest}" != xno])
+
 # Configure output
 # ----------------
 AC_CONFIG_FILES([
