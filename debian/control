@@ -3,7 +3,9 @@ Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
-               libandroid-cutils0-dev (>= 0.0.9)
+               pkg-config,
+               libandroid-cutils0-dev (>= 0.0.9),
+               libltdl-dev
 Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/laarid/package_android-libnativehelper
