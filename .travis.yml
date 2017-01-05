@@ -66,8 +66,8 @@ install:
 - ${DOCKER_EXEC_ROOT} mk-build-deps -i -s sudo -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated' ${TRAVIS_BUILD_DIR}/debian/control
 
 script:
-- ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; debuild --preserve-env --preserve-envvar PATH -i -us -uc -b"
-- ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; make -C build distcheck"
+- ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; debuild --preserve-env --preserve-envvar PATH --set-envvar=DEB_BUILD_OPTIONS=nocheck -i -us -uc -b"
+- ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; make -C build -j $(nproc) distcheck"
 - git status | grep 'working tree clean'
 
 before_deploy:
