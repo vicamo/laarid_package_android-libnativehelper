@@ -25,16 +25,6 @@ env:
   - BINTRAY_COMPONENT=main
   - BINTRAY_DESC="Android libnativehelper"
 
-matrix:
-  fast_finish: true
-  allow_failures:
-  - env: IMAGE_ARCH=armel
-  - env: IMAGE_ARCH=mips
-  - env: IMAGE_ARCH=mips64el
-  - env: IMAGE_ARCH=mipsel
-  - env: IMAGE_ARCH=ppc64el
-  - env: IMAGE_ARCH=s390x
-
 branches:
   only:
   - master
