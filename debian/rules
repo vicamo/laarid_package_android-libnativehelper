@@ -7,6 +7,15 @@
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
+CONFFLAGS =
+
+ifneq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+CONFFLAGS += --without-gtest
+endif
+
 # main packaging script based on dh7 syntax
 %:
 	dh $@ --with autoreconf --builddirectory=build --parallel
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(CONFFLAGS)
