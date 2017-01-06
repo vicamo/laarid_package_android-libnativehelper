@@ -19,7 +19,7 @@
         "desc": "v@BINTRAY_VERSION@ release",
         "released": "@BINTRAY_RELEASE_DATE@",
         "vcs_tag": "v@BINTRAY_VERSION@",
-        "gpgSign": true
+        "gpgSign": false
     },
 
     "files": [{
@@ -28,7 +28,8 @@
         "matrixParams": {
             "deb_distribution": "@BINTRAY_SUITE@",
             "deb_component": "@BINTRAY_COMPONENT@",
-            "deb_architecture": "@BINTRAY_ARCH@"
+            "deb_architecture": "@BINTRAY_ARCH@",
+            "override": 1
         }
     }],
     "publish": true
