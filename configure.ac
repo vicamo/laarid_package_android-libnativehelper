@@ -24,7 +24,7 @@
 #   nativehelper_interface_revision = 0
 m4_define([nativehelper_major_version], [0])
 m4_define([nativehelper_minor_version], [0])
-m4_define([nativehelper_micro_version], [3])
+m4_define([nativehelper_micro_version], [4])
 m4_define([nativehelper_interface_revision], [0])
 m4_define([nativehelper_api_version], [nativehelper_major_version.0])
 m4_define([nativehelper_release_number], [nativehelper_major_version])
