@@ -48,7 +48,6 @@ JniInvocation::~JniInvocation() {
 
 static const char* kLibrarySystemProperty = "persist.sys.dalvik.vm.lib.2";
 static const char* kDebuggableSystemProperty = "ro.debuggable";
-static const char* kDebuggableFallback = "0";  // Not debuggable.
 static const char* kLibraryFallback = "libart.so";
 
 template<typename T> void UNUSED(const T&) {}
@@ -56,8 +55,8 @@ template<typename T> void UNUSED(const T&) {}
 const char* JniInvocation::GetLibrary(const char* library, char* buffer) {
   const char* default_library;
 
-  char debuggable[PROPERTY_VALUE_MAX];
-  property_get(kDebuggableSystemProperty, debuggable, kDebuggableFallback);
+  char debuggable[PROP_VALUE_MAX];
+  __system_property_get(kDebuggableSystemProperty, debuggable);
 
   if (strcmp(debuggable, "1") != 0) {
     // Not a debuggable build.
@@ -71,8 +70,11 @@ const char* JniInvocation::GetLibrary(const char* library, char* buffer) {
     // Accept the library parameter. For the case it is NULL, load the default
     // library from the system property.
     if (buffer != NULL) {
-      property_get(kLibrarySystemProperty, buffer, kLibraryFallback);
-      default_library = buffer;
+      if (__system_property_get(kLibrarySystemProperty, buffer) > 0) {
+        default_library = buffer;
+      } else {
+        default_library = kLibraryFallback;
+      }
     } else {
       // No buffer given, just use default fallback.
       default_library = kLibraryFallback;
@@ -88,8 +90,12 @@ const char* JniInvocation::GetLibrary(const char* library, char* buffer) {
 bool JniInvocation::Init(const char* library) {
   char buffer[PROPERTY_VALUE_MAX];
   library = GetLibrary(library, buffer);
-
-  handle_ = dlopen(library, RTLD_NOW);
+  // Load with RTLD_NODELETE in order to ensure that libart.so is not unmapped when it is closed.
+  // This is due to the fact that it is possible that some threads might have yet to finish
+  // exiting even after JNI_DeleteJavaVM returns, which can lead to segfaults if the library is
+  // unloaded.
+  const int kDlopenFlags = RTLD_NOW | RTLD_NODELETE;
+  handle_ = dlopen(library, kDlopenFlags);
   if (handle_ == NULL) {
     if (strcmp(library, kLibraryFallback) == 0) {
       // Nothing else to try.
@@ -104,7 +110,7 @@ bool JniInvocation::Init(const char* library) {
     ALOGW("Falling back from %s to %s after dlopen error: %s",
           library, kLibraryFallback, dlerror());
     library = kLibraryFallback;
-    handle_ = dlopen(library, RTLD_NOW);
+    handle_ = dlopen(library, kDlopenFlags);
     if (handle_ == NULL) {
       ALOGE("Failed to dlopen %s: %s", library, dlerror());
       return false;

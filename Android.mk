@@ -13,77 +13,55 @@
 # limitations under the License.
 
 
-LOCAL_PATH := $(call my-dir)
+# Installable libraries
+# ---------------------
+lib_LTLIBRARIES = \
+	libandroid-nativehelper.la
 
-local_src_files := \
-    JNIHelp.cpp \
-    JniConstants.cpp \
-    toStringArray.cpp
+# libandroid-nativehelper.la
+# --------------------------
+libandroid_nativehelper_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(SYSTEMCORE_CFLAGS) \
+	-fvisibility=protected
+libandroid_nativehelper_la_LDFLAGS = \
+	$(libtool_opts)
+libandroid_nativehelper_la_LIBADD = \
+	$(LIBADD_DLOPEN) \
+	$(SYSTEMCORE_LIBS)
+libandroid_nativehelper_la_SOURCES = \
+	AsynchronousCloseMonitor.cpp \
+	JNIHelp.cpp \
+	JniConstants.cpp \
+	JniInvocation.cpp \
+	toStringArray.cpp
 
+# HEADERS: android/nativehelper
+# -----------------------------
+incdir = $(includedir)/android/nativehelper-$(NATIVEHELPER_API_VERSION)/nativehelper
+inc_HEADERS = \
+	include/nativehelper/AsynchronousCloseMonitor.h \
+	include/nativehelper/JNIHelp.h \
+	include/nativehelper/JniConstants.h \
+	include/nativehelper/JniInvocation.h \
+	include/nativehelper/ScopedBytes.h \
+	include/nativehelper/ScopedFd.h \
+	include/nativehelper/ScopedLocalFrame.h \
+	include/nativehelper/ScopedLocalRef.h \
+	include/nativehelper/ScopedPrimitiveArray.h \
+	include/nativehelper/ScopedStringChars.h \
+	include/nativehelper/ScopedUtfChars.h \
+	include/nativehelper/UniquePtr.h \
+	include/nativehelper/jni.h \
+	include/nativehelper/toStringArray.h
 
-#
-# Build for the target (device).
-#
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := \
-    $(local_src_files) \
-    JniInvocation.cpp
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libnativehelper
-LOCAL_CLANG := true
-LOCAL_CFLAGS := -Werror -fvisibility=protected
-LOCAL_C_INCLUDES := libcore/include
-LOCAL_SHARED_LIBRARIES += libcutils libdl
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_SHARED_LIBRARY)
-
-
-#
-# NDK-only build for the target (device), using libc++.
-# - Relies only on NDK exposed functionality.
-# - This doesn't include JniInvocation.
-#
-
-include $(CLEAR_VARS)
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := libnativehelper_compat_libc++
-LOCAL_CLANG := true
-LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/include/nativehelper
-LOCAL_EXPORT_C_INCLUDE_DIRS := \
-    $(LOCAL_PATH)/include/nativehelper
-LOCAL_CFLAGS := -Werror
-LOCAL_SRC_FILES := $(local_src_files)
-LOCAL_LDFLAGS := -llog -ldl
-LOCAL_SDK_VERSION := 19
-LOCAL_NDK_STL_VARIANT := c++_static
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_SHARED_LIBRARY)
-
-
-#
-# Build for the host.
-#
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libnativehelper
-LOCAL_MODULE_TAGS := optional
-LOCAL_CLANG := true
-LOCAL_SRC_FILES := \
-    $(local_src_files) \
-    JniInvocation.cpp
-LOCAL_CFLAGS := -Werror -fvisibility=protected
-LOCAL_C_INCLUDES := libcore/include
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_LDFLAGS := -ldl
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-LOCAL_MULTILIB := both
-include $(BUILD_HOST_SHARED_LIBRARY)
+# PKG-CONFIG data files
+# ---------------------
+pkgconfig_DATA = \
+	android-nativehelper-$(NATIVEHELPER_API_VERSION).pc
 
 #
 # Tests.
 #
 
-include $(LOCAL_PATH)/tests/Android.mk
+include $(srcdir)/tests/Android.mk

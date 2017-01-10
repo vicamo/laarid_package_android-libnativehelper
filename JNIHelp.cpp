@@ -79,21 +79,29 @@ extern "C" int jniRegisterNativeMethods(C_JNIEnv* env, const char* className,
 
     scoped_local_ref<jclass> c(env, findClass(env, className));
     if (c.get() == NULL) {
-        char* msg;
-        if (asprintf(&msg, "Native registration unable to find class '%s'; aborting...", className) < 0) {
-            e->FatalError("Fail to allocate memory for error messages; aborting...");
+        char* tmp;
+        const char* msg;
+        if (asprintf(&tmp,
+                     "Native registration unable to find class '%s'; aborting...",
+                     className) == -1) {
+            // Allocation failed, print default warning.
+            msg = "Native registration unable to find class; aborting...";
         } else {
-            e->FatalError(msg);
+            msg = tmp;
         }
+        e->FatalError(msg);
     }
 
     if ((*env)->RegisterNatives(e, c.get(), gMethods, numMethods) < 0) {
-        char* msg;
-        if (asprintf(&msg, "RegisterNatives failed for '%s'; aborting...", className) < 0) {
-            e->FatalError("Fail to allocate memory for error messages; aborting...");
+        char* tmp;
+        const char* msg;
+        if (asprintf(&tmp, "RegisterNatives failed for '%s'; aborting...", className) == -1) {
+            // Allocation failed, print default warning.
+            msg = "RegisterNatives failed; aborting...";
         } else {
-            e->FatalError(msg);
+            msg = tmp;
         }
+        e->FatalError(msg);
     }
 
     return 0;
@@ -316,6 +324,7 @@ const char* jniStrError(int errnum, char* buf, size_t buflen) {
 
 jobject jniCreateFileDescriptor(C_JNIEnv* env, int fd) {
     JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+    JniConstants::init(e);
     static jmethodID ctor = e->GetMethodID(JniConstants::fileDescriptorClass, "<init>", "()V");
     jobject fileDescriptor = (*env)->NewObject(e, JniConstants::fileDescriptorClass, ctor);
     // NOTE: NewObject ensures that an OutOfMemoryError will be seen by the Java
@@ -328,6 +337,7 @@ jobject jniCreateFileDescriptor(C_JNIEnv* env, int fd) {
 
 int jniGetFDFromFileDescriptor(C_JNIEnv* env, jobject fileDescriptor) {
     JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+    JniConstants::init(e);
     static jfieldID fid = e->GetFieldID(JniConstants::fileDescriptorClass, "descriptor", "I");
     if (fileDescriptor != NULL) {
         return (*env)->GetIntField(e, fileDescriptor, fid);
@@ -338,12 +348,14 @@ int jniGetFDFromFileDescriptor(C_JNIEnv* env, jobject fileDescriptor) {
 
 void jniSetFileDescriptorOfFD(C_JNIEnv* env, jobject fileDescriptor, int value) {
     JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+    JniConstants::init(e);
     static jfieldID fid = e->GetFieldID(JniConstants::fileDescriptorClass, "descriptor", "I");
     (*env)->SetIntField(e, fileDescriptor, fid, value);
 }
 
 jobject jniGetReferent(C_JNIEnv* env, jobject ref) {
     JNIEnv* e = reinterpret_cast<JNIEnv*>(env);
+    JniConstants::init(e);
     static jmethodID get = e->GetMethodID(JniConstants::referenceClass, "get", "()Ljava/lang/Object;");
     return (*env)->CallObjectMethod(e, ref, get);
 }
