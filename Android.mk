@@ -49,6 +49,7 @@ inc_HEADERS = \
 	include/nativehelper/ScopedLocalFrame.h \
 	include/nativehelper/ScopedLocalRef.h \
 	include/nativehelper/ScopedPrimitiveArray.h \
+	include/nativehelper/ScopedPthreadMutexLock.h \
 	include/nativehelper/ScopedStringChars.h \
 	include/nativehelper/ScopedUtfChars.h \
 	include/nativehelper/UniquePtr.h \
