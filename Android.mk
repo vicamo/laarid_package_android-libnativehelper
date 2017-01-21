@@ -20,15 +20,22 @@ lib_LTLIBRARIES = \
 
 # libandroid-nativehelper.la
 # --------------------------
+libandroid_nativehelper_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS)
 libandroid_nativehelper_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
-	$(SYSTEMCORE_CFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	-fvisibility=protected
 libandroid_nativehelper_la_LDFLAGS = \
 	$(libtool_opts)
 libandroid_nativehelper_la_LIBADD = \
+	$(PTHREAD_LIBS) -lpthread \
 	$(LIBADD_DLOPEN) \
-	$(SYSTEMCORE_LIBS)
+	$(BIONIC_LIBS) \
+	$(LOG_LIBS)
 libandroid_nativehelper_la_SOURCES = \
 	AsynchronousCloseMonitor.cpp \
 	JNIHelp.cpp \
