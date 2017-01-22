@@ -24,7 +24,7 @@
 #   nativehelper_interface_revision = 0
 m4_define([nativehelper_major_version], [0])
 m4_define([nativehelper_minor_version], [0])
-m4_define([nativehelper_micro_version], [3])
+m4_define([nativehelper_micro_version], [4])
 m4_define([nativehelper_interface_revision], [0])
 m4_define([nativehelper_api_version], [nativehelper_major_version.0])
 m4_define([nativehelper_release_number], [nativehelper_major_version])
@@ -97,16 +97,16 @@ AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
 
 SYSTEMCORE_API_VERSION=0.0
-SYSTEMCORE_REQUIRED_VERSION=0.0.9
+SYSTEMCORE_REQUIRED_VERSION=0.0.12
 AC_SUBST([SYSTEMCORE_API_VERSION])
 AC_SUBST([SYSTEMCORE_REQUIRED_VERSION])
 
-PKG_CHECK_MODULES([SYSTEMCORE], [
-  android-cutils-$SYSTEMCORE_API_VERSION >= $SYSTEMCORE_REQUIRED_VERSION
-  android-log-$SYSTEMCORE_API_VERSION >= $SYSTEMCORE_REQUIRED_VERSION
-])
-AC_SUBST([SYSTEMCORE_CFLAGS])
-AC_SUBST([SYSTEMCORE_LIBS])
+PKG_CHECK_MODULES([LOG], [android-log-$SYSTEMCORE_API_VERSION >= $SYSTEMCORE_REQUIRED_VERSION])
+AC_SUBST([LOG_CFLAGS])
+AC_SUBST([LOG_LIBS])
+PKG_CHECK_MODULES([CUTILS], [android-cutils-$SYSTEMCORE_API_VERSION >= $SYSTEMCORE_REQUIRED_VERSION])
+AC_SUBST([CUTILS_CFLAGS])
+AC_SUBST([CUTILS_LIBS])
 
 # Thread implementation
 # ---------------------

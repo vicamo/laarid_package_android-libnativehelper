@@ -8,11 +8,12 @@ TESTS += \
 %canon_reldir%_JniInvocation_test_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS) \
-	$(SYSTEMCORE_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS) \
 	$(GTEST_CPPFLAGS)
 %canon_reldir%_JniInvocation_test_LDADD = \
 	$(BIONIC_LIBS) \
-	$(SYSTEMCORE_LIBS) \
+	$(LOG_LIBS) \
 	libandroid-nativehelper.la \
 	$(GTEST_LIBS)
 %canon_reldir%_JniInvocation_test_DEPENDENCIES = \
