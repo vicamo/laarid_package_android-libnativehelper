@@ -1,3 +1,9 @@
+android-libnativehelper (0.0.4+b1) stretch; urgency=low
+
+  * correct package dependencies
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Mon, 23 Jan 2017 22:30:26 +0800
+
 android-libnativehelper (0.0.4) stretch; urgency=low
 
   * merge aosp/nougat-dev
