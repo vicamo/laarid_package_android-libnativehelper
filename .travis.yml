@@ -6,16 +6,16 @@ language: cpp
 
 env:
   matrix:
-  - IMAGE_ARCH=amd64
-  - IMAGE_ARCH=arm64
-  - IMAGE_ARCH=armel
-  - IMAGE_ARCH=armhf
-  - IMAGE_ARCH=i386
-  - IMAGE_ARCH=mips
-  - IMAGE_ARCH=mips64el
-  - IMAGE_ARCH=mipsel
-  - IMAGE_ARCH=ppc64el
-  - IMAGE_ARCH=s390x
+  - JOB_ARCH=amd64
+  - JOB_ARCH=arm64
+  - JOB_ARCH=armel
+  - JOB_ARCH=armhf
+  - JOB_ARCH=i386
+  - JOB_ARCH=mips
+  - JOB_ARCH=mips64el
+  - JOB_ARCH=mipsel
+  - JOB_ARCH=ppc64el
+  - JOB_ARCH=s390x
   global:
   - DOCKER_EXEC_ROOT="sudo docker exec --interactive --tty --user root test_container"
   - DOCKER_EXEC="sudo docker exec --interactive --tty test_container"
@@ -42,14 +42,14 @@ cache:
 - apt
 
 before_install:
-- sudo docker pull laarid/devel:${IMAGE_ARCH}
+- sudo docker pull laarid/devel:${JOB_ARCH}
 - sudo docker images
 - |
   sudo docker run --detach --interactive --tty \
     --name test_container \
     --volume ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
     --add-host dl.bintray.com:$(nslookup dl.bintray.com | grep -m1 -A1 Name: | grep Address: | awk '{print $2}') \
-    laarid/devel:${IMAGE_ARCH} \
+    laarid/devel:${JOB_ARCH} \
     /bin/bash
 
 install:
