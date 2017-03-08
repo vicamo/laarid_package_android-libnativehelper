@@ -7,15 +7,15 @@ language: cpp
 env:
   matrix:
   - JOB_ARCH=amd64
-  - JOB_ARCH=arm64
-  - JOB_ARCH=armel
-  - JOB_ARCH=armhf
+  - JOB_ARCH=arm64 JOB_CROSS=1
+  - JOB_ARCH=armel JOB_CROSS=1
+  - JOB_ARCH=armhf JOB_CROSS=1
   - JOB_ARCH=i386
-  - JOB_ARCH=mips
-  - JOB_ARCH=mips64el
-  - JOB_ARCH=mipsel
-  - JOB_ARCH=ppc64el
-  - JOB_ARCH=s390x
+  - JOB_ARCH=mips JOB_CROSS=1
+  - JOB_ARCH=mips64el JOB_CROSS=1
+  - JOB_ARCH=mipsel JOB_CROSS=1
+  - JOB_ARCH=ppc64el JOB_CROSS=1
+  - JOB_ARCH=s390x JOB_CROSS=1
   global:
   - DOCKER_EXEC_ROOT="sudo docker exec --interactive --tty --user root test_container"
   - DOCKER_EXEC="sudo docker exec --interactive --tty test_container"
@@ -42,20 +42,19 @@ cache:
 - apt
 
 before_install:
-- sudo docker pull laarid/devel:${JOB_ARCH}
-- sudo docker images
 - |
   sudo docker run --detach --interactive --tty \
     --name test_container \
     --volume ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
     --workdir ${TRAVIS_BUILD_DIR} \
     --add-host dl.bintray.com:$(nslookup dl.bintray.com | grep -m1 -A1 Name: | grep Address: | awk '{print $2}') \
-    laarid/devel:${JOB_ARCH} \
+    laarid/$(test -n "${JOB_CROSS}" && echo "cross-build" || echo "devel"):${JOB_ARCH} \
     /bin/bash
 
 install:
 - ${DOCKER_EXEC_ROOT} apt-get update -qq
 - ${DOCKER_EXEC} mk-build-deps
+    --host-arch ${JOB_ARCH}
     --install --remove
     --root-cmd sudo
     --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'
@@ -63,7 +62,9 @@ install:
 script:
 - ${DOCKER_EXEC} env
       "DEB_BUILD_OPTIONS=nocheck"
-    debuild -i -us -uc -b
+    dpkg-buildpackage
+      --host-arch ${JOB_ARCH}
+      -i -us -uc -b
 - ${DOCKER_EXEC} make -C build -j $(nproc) distcheck
 - git status | grep 'working tree clean'
 
@@ -81,7 +82,7 @@ before_deploy:
         -e "s#@BINTRAY_POOLABBR@#$(cat debian/control | grep ^Source: | awk '{print $2}' | cut -c1)#g" \
         -e "s#@BINTRAY_SUITE@#$(${DOCKER_EXEC_NOTTY} cat /etc/apt/sources.list | grep -m 1 '^deb ' | awk '{print $3}')#g" \
         -e "s#@BINTRAY_COMPONENT@#${BINTRAY_COMPONENT}#g" \
-        -e "s#@BINTRAY_ARCH@#$(${DOCKER_EXEC_NOTTY} dpkg --print-architecture)#g" | \
+        -e "s#@BINTRAY_ARCH@#${JOB_ARCH}#g" | \
     tee debian/bintray.json
 
 deploy:
