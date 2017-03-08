@@ -55,10 +55,15 @@ before_install:
 
 install:
 - ${DOCKER_EXEC_ROOT} apt-get update -qq
-- ${DOCKER_EXEC} mk-build-deps -i -s sudo -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'
+- ${DOCKER_EXEC} mk-build-deps
+    --install --remove
+    --root-cmd sudo
+    --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'
 
 script:
-- ${DOCKER_EXEC} debuild --set-envvar=DEB_BUILD_OPTIONS=nocheck -i -us -uc -b
+- ${DOCKER_EXEC} env
+      "DEB_BUILD_OPTIONS=nocheck"
+    debuild -i -us -uc -b
 - ${DOCKER_EXEC} make -C build -j $(nproc) distcheck
 - git status | grep 'working tree clean'
 
