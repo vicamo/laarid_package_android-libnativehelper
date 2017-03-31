@@ -7,15 +7,15 @@ language: cpp
 env:
   matrix:
   - JOB_ARCH=amd64
-  - JOB_ARCH=arm64 JOB_CROSS=1
-  - JOB_ARCH=armel JOB_CROSS=1
-  - JOB_ARCH=armhf JOB_CROSS=1
+  - JOB_ARCH=arm64
+  - JOB_ARCH=armel
+  - JOB_ARCH=armhf
   - JOB_ARCH=i386
-  - JOB_ARCH=mips JOB_CROSS=1
-  - JOB_ARCH=mips64el JOB_CROSS=1
-  - JOB_ARCH=mipsel JOB_CROSS=1
-  - JOB_ARCH=ppc64el JOB_CROSS=1
-  - JOB_ARCH=s390x JOB_CROSS=1
+  - JOB_ARCH=mips
+  - JOB_ARCH=mips64el
+  - JOB_ARCH=mipsel
+  - JOB_ARCH=ppc64el
+  - JOB_ARCH=s390x
   global:
   - DOCKER_EXEC_ROOT="sudo docker exec --interactive --tty --user root test_container"
   - DOCKER_EXEC="sudo docker exec --interactive --tty test_container"
@@ -48,7 +48,7 @@ before_install:
     --volume ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
     --workdir ${TRAVIS_BUILD_DIR} \
     --add-host dl.bintray.com:$(nslookup dl.bintray.com | grep -m1 -A1 Name: | grep Address: | awk '{print $2}') \
-    laarid/$(test -n "${JOB_CROSS}" && echo "cross-build" || echo "devel"):${JOB_ARCH} \
+    laarid/devel:${JOB_ARCH} \
     /bin/bash
 
 install:
