@@ -28,7 +28,7 @@ env:
 branches:
   only:
   - master
-  - /^v\d+\.\d+\.\d+/
+  - release
 
 addons:
   apt:
@@ -76,7 +76,7 @@ before_deploy:
         -e "s#@BINTRAY_REPO@#${BINTRAY_REPO}#g" \
         -e "s#@BINTRAY_DESC@#${BINTRAY_DESC}#g" \
         -e "s#@GITHUB_REPO@#${TRAVIS_REPO_SLUG}#g" \
-        -e "s,@BINTRAY_VERSION@,${TRAVIS_TAG#v},g" \
+        -e "s#@BINTRAY_VERSION@#$(cat debian/changelog | head -n 1 | sed 's,.*(\(.*\)).*,\1,')#g" \
         -e "s#@BINTRAY_RELEASE_DATE@#$(cat debian/changelog | grep -m 1 '^ -- ' | sed 's,^.*  ,,')#g" \
         -e "s#@BINTRAY_OUTDIR@#$(dirname ${TRAVIS_BUILD_DIR})#g" \
         -e "s#@BINTRAY_POOLABBR@#$(cat debian/control | grep ^Source: | awk '{print $2}' | cut -c1)#g" \
@@ -92,7 +92,7 @@ deploy:
   key:
     secure: "XaGyur/JVtOkcfheR09E8pJTtGrzr6bEvZUXzPurW3ljqPz9UxEnDwdFS68l6KEEw64uKKXbN1QHpe7HNZoMcGbISB46Gau4w6gmIIX/vdPT8/I2a91LiXSMahwsk3gTDg+LnglgFA3RIR8dQnvulQkt5w2JZwwz7tI9hpxf8DmJYYgjwvUBwXBXI8COGzx3abJleRWSl/LdrfXIpkChdFcSWf1sIsaZZWQHIN6i61hknw2sjUjoMFQGTaVfqy+90L8d4x86eeWYwTvfFuaTIA6lcE0GwXjrn80nEYbtY5R6CV7athWJ1ddzxpkOqw9I7egfFwbCpNcGgEqiviFbZlj/zKNYNwser4GXpccuHT0/Dkf/ljoZLxtXxChW0aOy/kgleR5wksnuDfA3+glo63tDGhcwoxjdB1dyNBoSVxl4Sw1bItFS/H9YlmriqmbKdf84ytz30N1zaSVb7E+cBy3/skLiew9l3aKrjEr88me0Y5tKbDloM4/yLW5X+2Wk1HROPp2LgbWtXjAcR0oY8sHWu4hd33+FUs4n9xpBNiuXxX2MetAvBcakqee/gHyE2piFP0hAoBYIncp6SGQOn+XcHd8rd6YOt1cAKOEJbL3yswBmY4vQl4R0+w0oF+x+r6X+SoNj3+6iaHXoD9smdtCaJfImY68ZD/nGIQBz+rY="
   on:
-    tags: true
+    branch: release
 
 notifications:
   slack:
