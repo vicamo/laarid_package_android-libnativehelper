@@ -22,6 +22,9 @@
 
 #include <cstddef>
 
+#define _REALLY_INCLUDE_BIONIC_PROPERTIES_IMPL_H_
+#include <bionic/properties_impl.h>
+
 #define LOG_TAG "JniInvocation"
 #include "log/log.h"
 
@@ -55,7 +58,7 @@ template<typename T> void UNUSED(const T&) {}
 const char* JniInvocation::GetLibrary(const char* library, char* buffer) {
   const char* default_library;
 
-  char debuggable[PROP_VALUE_MAX];
+  char debuggable[PROPERTY_VALUE_MAX];
   __system_property_get(kDebuggableSystemProperty, debuggable);
 
   if (strcmp(debuggable, "1") != 0) {
